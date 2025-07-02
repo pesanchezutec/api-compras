@@ -1,20 +1,23 @@
 import boto3
-import json
 
 def lambda_handler(event, context):
-    body = json.loads(event.get('body', '{}'))
-    compra_id = body.get('compra_id')
-    datos = body.get('datos', {})
-
+    # Entrada (json)
+    compra_id = event['body']['compra_id']
+    datos = event['body']['datos']
+    # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('compras')
     response = table.update_item(
-        Key={ 'compra_id': compra_id },
-        UpdateExpression="SET datos = :d",
-        ExpressionAttributeValues={ ':d': datos },
+        Key={
+            'compra_id': compra_id
+        },
+        UpdateExpression="set datos=:datos_a_actualizar",
+        ExpressionAttributeValues={
+            ':datos_a_actualizar': datos
+        },
         ReturnValues="UPDATED_NEW"
     )
-
+    # Salida (json)
     return {
         'statusCode': 200,
         'response': response
