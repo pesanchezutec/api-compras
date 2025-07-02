@@ -1,14 +1,13 @@
 import boto3
-import json
 
 def lambda_handler(event, context):
-    body = json.loads(event.get('body', '{}'))
-    compra = body
-
+    # Entrada (json)
+    compra = event['body']
+    # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('compras')
     response = table.put_item(Item=compra)
-
+    # Salida (json)
     return {
         'statusCode': 200,
         'response': response
