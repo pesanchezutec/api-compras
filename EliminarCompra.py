@@ -1,16 +1,17 @@
 import boto3
-import json
 
 def lambda_handler(event, context):
-    body = json.loads(event.get('body', '{}'))
-    compra_id = body.get('compra_id')
-
+    # Entrada (json)
+    compra_id = event['body']['compra_id']    
+    # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('compras')
     response = table.delete_item(
-        Key={ 'compra_id': compra_id }
+        Key={
+            'compra_id': compra_id
+        }
     )
-
+    # Salida (json)
     return {
         'statusCode': 200,
         'response': response
