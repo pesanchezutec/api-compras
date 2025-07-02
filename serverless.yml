@@ -1,0 +1,55 @@
+service: api-compras
+
+provider:
+  name: aws
+  runtime: python3.13
+  memorySize: 1024
+  timeout: 20
+  iam:
+    role: arn:aws:iam::654654516540:role/LabRole
+
+functions:
+  listarCompras:
+    handler: ListarCompras.lambda_handler
+    events:
+      - http:
+          path: /compras/listar
+          method: get
+          cors: true
+          integration: lambda
+
+  buscarCompra:
+    handler: BuscarCompra.lambda_handler
+    events:
+      - http:
+          path: /compras/buscar
+          method: post
+          cors: true
+          integration: lambda
+
+  crearCompra:
+    handler: CrearCompra.lambda_handler
+    events:
+      - http:
+          path: /compras/crear
+          method: post
+          cors: true
+          integration: lambda
+
+  modificarCompra:
+    handler: ModificarCompra.lambda_handler
+    events:
+      - http:
+          path: /compras/modificar
+          method: put
+          cors: true
+          integration: lambda
+
+  eliminarCompra:
+    handler: EliminarCompra.lambda_handler
+    events:
+      - http:
+          path: /compras/eliminar
+          method: delete
+          cors: true
+          integration: lambda
